@@ -39,3 +39,7 @@ sysinfo.txt
 *.anim
 Animations/
 Animations.meta
+ExtendedInput.cs
+ExtendedInput.cs.meta
+InputManager.cs
+InputManager.cs.meta
