@@ -1,0 +1,15 @@
+{
+    "name": "VRCSDK3A",
+    "references": [
+        "GUID:2111264d52510ae478b78e1312ee4cff"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
