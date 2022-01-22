@@ -9,6 +9,7 @@ Displays [VRChat](https://hello.vrchat.com/) avatars from your download cache on
 * Supports SDK2 and SDK3 avatars.
 * Component Stripping for security.
 * Randomly applies animations.
+* Supports hardware buttons
 
 ## Requirements
 
