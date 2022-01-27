@@ -2,11 +2,14 @@
 
 Displays [VRChat](https://hello.vrchat.com/) avatars from your download cache on a [Looking Glass](https://lookingglassfactory.com/) display.
 
+![image](https://user-images.githubusercontent.com/13484789/150659031-29eb7ba0-29c7-4a94-983a-ba6bc668ae20.png)
+
 ## Features
 
 * Supports SDK2 and SDK3 avatars.
 * Component Stripping for security.
 * Randomly applies animations.
+* Supports hardware buttons
 
 ## Requirements
 
