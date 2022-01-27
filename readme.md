@@ -13,7 +13,7 @@ Displays [VRChat](https://hello.vrchat.com/) avatars from your download cache on
 
 ## Requirements
 
-* `Unity 2019.4
+* Unity 2019.4
 * [HoloPlay Unity Plugin](https://dhtk4bwj5r21z.cloudfront.net/UnityPlugin/PublicReleases/HoloPlay-Unity-Plugin-1.4.3.unitypackage) For interfacing with the display.
 * [Dynamic Bones](https://assetstore.unity.com/packages/tools/animation/dynamic-bone-16743) Wiggle.
 
