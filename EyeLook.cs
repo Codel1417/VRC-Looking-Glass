@@ -5,7 +5,6 @@ namespace VRC_LG
     public class EyeLook : MonoBehaviour
     {
         private LoadVRCAs loadVrcAs;
-
         private void Start()
         {
             loadVrcAs = FindObjectOfType<LoadVRCAs>();

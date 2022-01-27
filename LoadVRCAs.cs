@@ -48,8 +48,8 @@ namespace VRC_LG
             typeof(VRCAvatarDescriptor)
         };
 
-        public Transform eyeL;
-        public Transform eyeR;
+        [HideInInspector] public Transform eyeL;
+        [HideInInspector] public Transform eyeR;
 
         [Range(1, 60)] [SerializeField] [Tooltip("The time in seconds before the loaded asset is changed")]
         private float tineBetweenAssets = 5f;
@@ -88,6 +88,8 @@ namespace VRC_LG
 
         private float lastTime;
         private string loadedScene;
+        [Header("State")]
+        [SerializeField] [Tooltip("Pause automatically changing the loaded avatar")]
         private bool pause;
         private VRC_AvatarDescriptor sdk2AvatarDescriptor;
         private VRCAvatarDescriptor sdk3AvatarDescriptor;
@@ -272,9 +274,11 @@ namespace VRC_LG
             Animator avatarAnimator = spawnedObject.GetComponent<Animator>();
             if (avatarAnimator != null && controller != null && clips != null && clips.Length > 0)
             {
+                Debug.Log("Setting up animation");
                 AnimationClip temp = clips[Random.Range(0, clips.Length)];
                 if (temp != null)
                 {
+                    Debug.Log("Playing animation " + temp.name);
                     AnimatorOverrideController aoc = new AnimatorOverrideController(controller);
                     // map the animtion clip to the animator controller
                     List<KeyValuePair<AnimationClip, AnimationClip>> anims = aoc.animationClips
@@ -293,9 +297,9 @@ namespace VRC_LG
 
             if (sdk2AvatarDescriptor != null)
             {
-                GameObject l = GameObject.Find("Eye_L");
+                GameObject l = GameObject.Find("LeftEye");
                 if (l != null) eyeL = l.transform;
-                GameObject r = GameObject.Find("Eye_R");
+                GameObject r = GameObject.Find("RightEye");
                 if (r != null) eyeR = r.transform;
                 if (eyeL != null && eyeR != null && hasEyeLook != null) hasEyeLook.text = "Eye Look: Yes";
             }
