@@ -14,9 +14,9 @@ namespace VRC_LG
         private void OnPreRender()
         {
             Vector3 camPos = Camera.current.transform.position;
-            if (loadVrcAs != null && loadVrcAs.eyeL != null) loadVrcAs.eyeL.LookAt(camPos, Vector3.up);
+            if (loadVrcAs != null && loadVrcAs.enableEyeTracking && loadVrcAs.eyeL != null) loadVrcAs.eyeL.LookAt(camPos, Vector3.up);
 
-            if (loadVrcAs != null && loadVrcAs.eyeR != null) loadVrcAs.eyeR.LookAt(camPos, Vector3.up);
+            if (loadVrcAs != null && loadVrcAs.enableEyeTracking && loadVrcAs.eyeR != null) loadVrcAs.eyeR.LookAt(camPos, Vector3.up);
         }
     }
 }

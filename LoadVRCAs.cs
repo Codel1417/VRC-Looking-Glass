@@ -10,6 +10,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using VRC.SDK3.Avatars.Components;
 using VRCSDK2;
 using InputManager = LookingGlass.InputManager;
@@ -50,7 +51,7 @@ namespace VRC_LG
 
         [HideInInspector] public Transform eyeL;
         [HideInInspector] public Transform eyeR;
-
+        public bool enableEyeTracking;
         [Range(1, 60)] [SerializeField] [Tooltip("The time in seconds before the loaded asset is changed")]
         private float tineBetweenAssets = 5f;
 
@@ -73,7 +74,10 @@ namespace VRC_LG
 
         [SerializeField] [Tooltip("An overlay that displays if the loaded avatar supports Eye Look")]
         private TextMeshProUGUI hasEyeLook;
-
+        [SerializeField] [Tooltip("An overlay that covers the screen when the avatar is loading")]
+        public SkyboxManager skyboxManager;
+        public ScreenDimManager screenDimManager;    
+        public ReflectionProbe reflectionProbe;
         private readonly List<Type> allowedComponentsList = AllowedComponents.ToList();
         private string basePath = "\\AppData\\LocalLow\\VRChat\\VRChat\\Cache-WindowsPlayer\\";
 
@@ -95,7 +99,7 @@ namespace VRC_LG
         private VRCAvatarDescriptor sdk3AvatarDescriptor;
         private GameObject spawnedObject;
         private Vector3 viewPosition;
-
+        
         private void Start()
         {
             string userfolder = Environment.GetEnvironmentVariable("USERPROFILE");
@@ -176,10 +180,14 @@ namespace VRC_LG
             bool unload = true; // force entry into while loop
             sdk2AvatarDescriptor = null;
             sdk3AvatarDescriptor = null;
-
+            screenDimManager.FadeTo(new Color(0,0,0,1));
+            yield return new WaitUntil(() => !screenDimManager.isFading);
             while (currentAssetBundle == null || currentAssetBundle.isStreamedSceneAssetBundle &&
                    currentAssetBundle.GetAllAssetNames().Length == 0 || unload)
             {
+
+                
+                
                 // Unload the current asset bundle
                 unload = false;
                 if (spawnedObject != null)
@@ -224,11 +232,13 @@ namespace VRC_LG
             {
                 Debug.Log("Loading asset " + assetPaths[0]);
                 GameObject prefab = currentAssetBundle.LoadAsset<GameObject>(assetPaths[0]);
-                spawnedObject = Instantiate(prefab);
+                if (spawnedObject == null)
+                {
+                    spawnedObject = Instantiate(prefab);
+                }
                 // Strip components that are not whitelisted
                 IEnumerable<GameObject> prefabObjects = GetAllChildren(spawnedObject);
                 foreach (GameObject prefabObject in prefabObjects) StripComponents(prefabObject);
-
                 // Try to Set up the avatar
                 spawnedObject.transform.position = Vector3.zero; // center avatar
                 sdk3AvatarDescriptor = spawnedObject.GetComponent<VRCAvatarDescriptor>();
@@ -249,7 +259,8 @@ namespace VRC_LG
                     if (sdkVersion != null) sdkVersion.text = "SDK: Unknown";
                 }
                 SetUpAnimation();
-
+                screenDimManager.FadeTo(Color.clear);
+                skyboxManager.SetRandomSkybox();
                 // Set up the camera
                 if (holoplay != null)
                 {
@@ -261,6 +272,8 @@ namespace VRC_LG
                 }
 
                 SetUpEyeTracking();
+                reflectionProbe.RenderProbe();
+                DynamicGI.UpdateEnvironment();
             }
         }
 
@@ -288,7 +301,6 @@ namespace VRC_LG
                 }
             }
         }
-
         private void SetUpEyeTracking()
         {
             eyeL = null;
@@ -308,9 +320,6 @@ namespace VRC_LG
                 eyeL = sdk3AvatarDescriptor.customEyeLookSettings.leftEye;
                 eyeR = sdk3AvatarDescriptor.customEyeLookSettings.rightEye;
                 if (eyeL != null && eyeR != null && hasEyeLook != null) hasEyeLook.text = "Eye Look: Yes";
-            }
-            else
-            {
             }
         }
 
@@ -339,10 +348,6 @@ namespace VRC_LG
             foreach (Transform child in gameObject.transform) children.AddRange(GetAllChildren(child.gameObject));
 
             return children.ToArray();
-        }
-        private void OnPreRender()
-        {
-
         }
     }
 }
